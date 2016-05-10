@@ -262,6 +262,17 @@ class UUIDField(Field):
         return uuid.uuid4()
 
 
+class TimeDeltaField(_ScalarField):
+    def db_value(self, value):
+        seconds = value.total_seconds()
+        return seconds
+
+    def python_value(self, value):
+        if isinstance(value, (basestring_type, int, float)):
+            return datetime.timedelta(seconds=float(value))
+        return value
+
+
 class DateTimeField(_ScalarField):
     """Store Python datetime objects."""
     def db_value(self, value):
